@@ -39,4 +39,18 @@ describe "User" do
 			@user.balance.should eq 100
 		end
 	end
+	describe "self.authanticate(username, password)" do
+		before(:each) do
+			@user = User.create(:username => "Jesus", :password => "alpha_and_omega")
+		end
+		it "should return true if username and password match" do
+			User.authenticate("Jesus", "alpha_and_omega").should be true
+		end
+		it "should return false if username does not exist" do
+			User.authenticate("Judas", "alpha_and_omega").should be false
+		end
+		it "should return false if password is incorrect" do
+			User.authenticate("Jesus", "unicorns").should be false
+		end
+	end
 end

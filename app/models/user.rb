@@ -36,4 +36,9 @@ class User < ActiveRecord::Base
   def set_default_balance
   	self.balance ||= 0
   end
+
+  def self.authenticate(username, password)
+  	#Does user exist? And if so, is password correct?
+  	!(user = User.where(:username => username).first).nil? && user.encrypted_password == Digest::SHA512.hexdigest(password+user.salt).to_s
+  end
 end
