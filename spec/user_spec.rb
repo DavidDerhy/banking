@@ -25,14 +25,14 @@ describe "User" do
 			@user.save
 		end
 		it "should transfer the amount from user to recipient" do
-			@user.transfer(@recipient.username, 70)
+  			@user.transfer(@recipient.username, 70)
 			@user.balance.should eq 30
-			@recipient.balance.should eq 70
+			User.where(:username => @recipient.username).first.balance.should eq 70
 		end
 		it "should fail if the balance would be overdrawn" do
 			expect { @user.transfer(@recipient.username, 110) }.to raise_error
 			@user.balance.should eq 100
-			@recipient.balance.should eq 0
+			User.where(:username => @recipient.username).first.balance.should eq 0
 		end
 		it "should fail if the recipient does not exist" do
 			expect { @user.transfer("Eve", 70) }.to raise_error
