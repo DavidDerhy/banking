@@ -1,4 +1,10 @@
 Banking::Application.routes.draw do
+  root :to => "users#transfer"
+
+  match "/login", :to => "users#login"
+  match "/transfer", :to => "users#transfer"
+  get "/logout", :to => "users#logout"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

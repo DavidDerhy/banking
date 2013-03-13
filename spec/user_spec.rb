@@ -25,17 +25,30 @@ describe "User" do
 			@user.save
 		end
 		it "should transfer the amount from user to recipient" do
-  			@user.transfer(@recipient.username, 70)
+  			@user.transfer("Adam", 70)
 			@user.balance.should eq 30
 			User.where(:username => @recipient.username).first.balance.should eq 70
 		end
 		it "should fail if the balance would be overdrawn" do
-			expect { @user.transfer(@recipient.username, 110) }.to raise_error
+			@user.transfer("Adam", 110).should be false
 			@user.balance.should eq 100
 			User.where(:username => @recipient.username).first.balance.should eq 0
 		end
 		it "should fail if the recipient does not exist" do
-			expect { @user.transfer("Eve", 70) }.to raise_error
+			@user.transfer("Eve", 70).should be false
+			@user.balance.should eq 100
+		end
+		it "should log the transfer" do
+  			@user.transfer("Adam", 70)
+			@user.debit_logs.last.amount.should eq 70			
+			@recipient.credit_logs.last.amount.should eq 70			
+		end
+		it "should not transfer negative amounts" do
+			@user.transfer("Adam", -70).should be false
+			@user.balance.should eq 100
+		end
+		it "should not accept strings as input" do
+			@user.transfer("Adam", "Snake").should be false
 			@user.balance.should eq 100
 		end
 	end
@@ -43,8 +56,8 @@ describe "User" do
 		before(:each) do
 			@user = User.create(:username => "Jesus", :password => "alpha_and_omega")
 		end
-		it "should return true if username and password match" do
-			User.authenticate("Jesus", "alpha_and_omega").should be true
+		it "should return the user if username and password match" do
+			User.authenticate("Jesus", "alpha_and_omega").should eq @user
 		end
 		it "should return false if username does not exist" do
 			User.authenticate("Judas", "alpha_and_omega").should be false

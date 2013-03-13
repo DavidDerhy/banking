@@ -71,6 +71,8 @@ GEM
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.7.7)
+    launchy (2.2.0)
+      addressable (~> 2.3)
     libwebsocket (0.1.4)
       addressable
     mail (2.4.4)
@@ -156,6 +158,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   jquery-rails
+  launchy
   pg
   rails (= 3.2.12)
   rspec-rails

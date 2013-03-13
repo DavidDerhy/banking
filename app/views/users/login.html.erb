@@ -1,0 +1,6 @@
+<h1>Login</h1>
+<%= form_for :user, :controller => :users, :action => :login, :method => :post do |f| %>
+	<%= f.text_field :username, :placeholder => "User name" %><br>
+	<%= f.password_field :password, :placeholder => "Password" %><br>
+	<%= f.submit "Login" %>
+<% end %>

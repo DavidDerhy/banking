@@ -1,0 +1,32 @@
+<%= link_to "Logout", logout_url %>
+<h1>Banking</h1>
+<h2>Balance <%= number_to_currency(@current_user.balance) %></h2>
+
+<%= form_for :recipient, :controller => :users, :action => :transfer, :method => :post do |f| %>
+	<%= f.text_field :amount, :placeholder => "Amount" %><br>
+	<%= f.select(:username, @recipients.map{|r| r.username}, :prompt => "Select recipient") %><br>
+	<%= f.submit "Transfer" %>
+<% end %>
+
+<hr>
+<h2>History</h2>
+<table id="history">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Sender</th>
+			<th>Recipient</th>
+			<th>Amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @transfer_logs.each do |transfer| %>
+			<tr>
+				<td><%= transfer.created_at %></td>
+				<td><%= transfer.sender.username %></td>
+				<td><%= transfer.recipient.username %></td>
+				<td><%= number_to_currency(transfer.amount) %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
